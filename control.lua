@@ -60,6 +60,13 @@ local function build_honks()
     global.honks.alt = settings.global["honk-sound-manual-alt"].value
   end
   -- game.print("Honks (re)built")
+  
+  -- List of custom honks
+  -- Stored as a dictionary of default_honk_type -> entity_name -> custom_honk_name
+  -- If custom_honk_name is "" or "none", no sound will be played
+  -- If custom_honk_name is set to nil or an invalid sound, default sound will be played
+  global.custom_honks = global.custom_honks or {["honk-single"]={}, ["honk-double"]={}}
+  
 end
 
 script.on_configuration_changed(build_honks)
@@ -71,11 +78,13 @@ script.on_event(defines.events.on_runtime_mod_setting_changed, function(event)
 end)
 
 function playSoundAtEntity(sound, entity)
-  entity.surface.play_sound
-  {
-    path = sound,
-    position = entity.position
-  }
+  local custom_sound = global.custom_honks[sound][entity.name]
+  if custom_sound ~= "" and custom_sound ~= "none" then
+    if custom_sound and game.is_valid_sound_path(custom_sound) then
+      sound = custom_sound
+    end
+    entity.surface.play_sound{path = sound, position = entity.position}
+  end
 end
 
 -- Find loco(s) to emit honks in train
@@ -144,3 +153,28 @@ script.on_event(defines.events.on_train_changed_state, function(event)
     findLocoToHonk(global.honks[event.train.state][event.old_state], event.train)
   end
 end)
+
+-- Interface to add custom sounds for specific entities
+local function set_custom_honks(entity_name, honk_single_name, honk_double_name)
+  global.custom_honks["honk-single"][entity_name] = honk_single_name
+  global.custom_honks["honk-double"][entity_name] = honk_double_name
+end
+
+remote.add_interface('Honk', {set_custom_honks = set_custom_honks})
+
+
+------------------------------------------------------------------------------------
+--                    FIND LOCAL VARIABLES THAT ARE USED GLOBALLY                 --
+--                              (Thanks to eradicator!)                           --
+------------------------------------------------------------------------------------
+setmetatable(_ENV,{
+  __newindex=function (self,key,value) --locked_global_write
+    error('\n\n[ER Global Lock] Forbidden global *write*:\n'
+      .. serpent.line{key=key or '<nil>',value=value or '<nil>'}..'\n')
+    end,
+  __index   =function (self,key) --locked_global_read
+    error('\n\n[ER Global Lock] Forbidden global *read*:\n'
+      .. serpent.line{key=key or '<nil>'}..'\n')
+    end ,
+  })
+  
