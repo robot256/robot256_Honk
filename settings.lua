@@ -64,5 +64,12 @@ data:extend({
     default_value = "honk-single",
     allowed_values = {"honk-double", "honk-single", "none"},
     order = "bf"
+  },
+  {
+    type = "bool-setting",
+    name = "honk-allow-custom-sounds",
+    setting_type = "runtime-global",
+    default_value = true,
+    order = "bg"
   }
 })

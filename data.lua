@@ -17,7 +17,7 @@ data:extend({
   {
     type = "sound",
     name = "honk-single",
-    filename = "__Honk__/sounds/honklong.ogg",
+    filename = "__robot256_Honk__/sounds/honklong.ogg",
     category = "environment",
     audible_distance_modifier = settings.startup["honk-sound-range"].value,
     volume = settings.startup["honk-sound-volume"].value
@@ -25,7 +25,7 @@ data:extend({
   {
     type = "sound",
     name = "honk-double",
-    filename = "__Honk__/sounds/honk2xshort.ogg",
+    filename = "__robot256_Honk__/sounds/honk2xshort.ogg",
     category = "environment",
     audible_distance_modifier = settings.startup["honk-sound-range"].value,
     volume = settings.startup["honk-sound-volume"].value

@@ -65,8 +65,11 @@ local function build_honks()
   -- Stored as a dictionary of default_honk_type -> entity_name -> custom_honk_name
   -- If custom_honk_name is "" or "none", no sound will be played
   -- If custom_honk_name is set to nil or an invalid sound, default sound will be played
-  global.custom_honks = global.custom_honks or {["honk-single"]={}, ["honk-double"]={}}
-  
+  if settings.global["honk-allow-custom-sounds"].value then
+    global.custom_honks = global.custom_honks or {["honk-single"]={}, ["honk-double"]={}}
+  else
+    global.custom_honks = nil
+  end
 end
 
 script.on_configuration_changed(build_honks)
@@ -79,7 +82,7 @@ end)
 
 function playSoundAtEntity(sound, entity)
   -- Check for custom sound assignment
-  local custom_sound = global.custom_honks[sound][entity.name]
+  local custom_sound = global.custom_honks and global.custom_honks[sound][entity.name]
   if custom_sound == "" or custom_sound == "none" then
     -- This sound has been explicitly disabled for this entity
     sound = nil
@@ -88,7 +91,7 @@ function playSoundAtEntity(sound, entity)
     sound = custom_sound
   else
     -- Check for custom default assignment
-    local custom_default = global.custom_honks[sound]["default"]
+    local custom_default = global.custom_honks and global.custom_honks[sound]["default"]
     if custom_default == "" or custom_default == "none" then
       -- This sound has been explicitly disabled for the default case
       -- Only custom sounds will be played for it
@@ -179,9 +182,11 @@ end)
 
 -- Interface to add custom sounds for specific entities
 local function set_custom_honks(entity_name, honk_single_name, honk_double_name)
-  global.custom_honks = global.custom_honks or {["honk-single"]={}, ["honk-double"]={}}
-  global.custom_honks["honk-single"][entity_name] = honk_single_name
-  global.custom_honks["honk-double"][entity_name] = honk_double_name
+  if settings.global["honk-allow-custom-sounds"].value then
+    global.custom_honks = global.custom_honks or {["honk-single"]={}, ["honk-double"]={}}
+    global.custom_honks["honk-single"][entity_name] = honk_single_name
+    global.custom_honks["honk-double"][entity_name] = honk_double_name
+  end
 end
 
 remote.add_interface('Honk', {set_custom_honks = set_custom_honks})

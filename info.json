@@ -1,9 +1,9 @@
 {
-	"name": "Honk",
-	"version": "4.1.1",
-	"title": "Honk",
-	"author": "GotLag",
+	"name": "robot256_Honk",
+	"version": "4.1.2",
+	"title": "robot256_Honk",
+	"author": "robot256",
 	"homepage": "https://forums.factorio.com/viewtopic.php?f=92&t=21623",
-	"description": "Trains honk when stopping. And starting. And on command.",
+	"description": "Temporary fork of GotLag's Honk",
 	"factorio_version": "0.18"
 }
