@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 4.1.1
+Date: XX. XX. 2020
+  Changes:
+    - Added mod interface to register custom sounds for specific entities, or override/disable the default sounds. Thanks to robot256.
+---------------------------------------------------------------------------------------------------
 Version: 4.1.0
 Date: 03. 02. 2020
   Changes:

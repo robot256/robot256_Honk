@@ -78,11 +78,34 @@ script.on_event(defines.events.on_runtime_mod_setting_changed, function(event)
 end)
 
 function playSoundAtEntity(sound, entity)
+  -- Check for custom sound assignment
   local custom_sound = global.custom_honks[sound][entity.name]
-  if custom_sound ~= "" and custom_sound ~= "none" then
-    if custom_sound and game.is_valid_sound_path(custom_sound) then
-      sound = custom_sound
+  if custom_sound == "" or custom_sound == "none" then
+    -- This sound has been explicitly disabled for this entity
+    sound = nil
+  elseif custom_sound and game.is_valid_sound_path(custom_sound) then
+    -- Custom sound is valid, use this and ignore default
+    sound = custom_sound
+  else
+    -- Check for custom default assignment
+    local custom_default = global.custom_honks[sound]["default"]
+    if custom_default == "" or custom_default == "none" then
+      -- This sound has been explicitly disabled for the default case
+      -- Only custom sounds will be played for it
+      sound = nil
+    elseif custom_default and game.is_valid_sound_path(custom_default) then
+      -- Custom default sound is valid, use this and ignore original default
+      sound = custom_default
+    else
+      -- No custom sound is defined, or custom sound is invalid
+      -- No custom default sound defined, or custom default sound is invalid
+      -- Use original default sound
+      sound = sound
     end
+  end
+  
+  -- Play sound
+  if sound then
     entity.surface.play_sound{path = sound, position = entity.position}
   end
 end
@@ -156,6 +179,7 @@ end)
 
 -- Interface to add custom sounds for specific entities
 local function set_custom_honks(entity_name, honk_single_name, honk_double_name)
+  global.custom_honks = global.custom_honks or {["honk-single"]={}, ["honk-double"]={}}
   global.custom_honks["honk-single"][entity_name] = honk_single_name
   global.custom_honks["honk-double"][entity_name] = honk_double_name
 end
