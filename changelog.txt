@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 4.1.2
+Date: 05. 25. 2020
+  Bugfixes:
+    - Fixed bug where removing a custom sounds mod would not reset sounds to default settings.
+---------------------------------------------------------------------------------------------------
 Version: 4.1.1
 Date: 05. 25. 2020
   Changes:

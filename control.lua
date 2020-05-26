@@ -62,14 +62,11 @@ local function build_honks()
   -- game.print("Honks (re)built")
   
   -- List of custom honks
-  -- Stored as a dictionary of default_honk_type -> entity_name -> custom_honk_name
+  -- Stored as a dictionary of [default_honk_type][entity_name] -> custom_honk_name
   -- If custom_honk_name is "" or "none", no sound will be played
   -- If custom_honk_name is set to nil or an invalid sound, default sound will be played
-  if settings.global["honk-allow-custom-sounds"].value then
-    global.custom_honks = global.custom_honks or {["honk-single"]={}, ["honk-double"]={}}
-  else
-    global.custom_honks = nil
-  end
+  -- If an entry exists for entity_name="default", it will override the standard default sounds
+  global.custom_honks = {["honk-single"]={}, ["honk-double"]={}}
 end
 
 script.on_configuration_changed(build_honks)
@@ -81,29 +78,28 @@ script.on_event(defines.events.on_runtime_mod_setting_changed, function(event)
 end)
 
 function playSoundAtEntity(sound, entity)
-  -- Check for custom sound assignment
-  local custom_sound = global.custom_honks and global.custom_honks[sound][entity.name]
-  if custom_sound == "" or custom_sound == "none" then
-    -- This sound has been explicitly disabled for this entity
-    sound = nil
-  elseif custom_sound and game.is_valid_sound_path(custom_sound) then
-    -- Custom sound is valid, use this and ignore default
-    sound = custom_sound
-  else
-    -- Check for custom default assignment
-    local custom_default = global.custom_honks and global.custom_honks[sound]["default"]
-    if custom_default == "" or custom_default == "none" then
-      -- This sound has been explicitly disabled for the default case
-      -- Only custom sounds will be played for it
-      sound = nil
-    elseif custom_default and game.is_valid_sound_path(custom_default) then
-      -- Custom default sound is valid, use this and ignore original default
-      sound = custom_default
-    else
-      -- No custom sound is defined, or custom sound is invalid
-      -- No custom default sound defined, or custom default sound is invalid
-      -- Use original default sound
-      sound = sound
+  -- Check if there is a custom sound for this entity, or if a custom default sound has been set
+  if global.custom_honks and global.custom_honks[sound] then
+    local custom_sound = global.custom_honks[sound][entity.name]
+    local custom_default = global.custom_honks[sound]["default"]
+    if custom_sound ~= nil then
+      if custom_sound == "" or custom_sound == "none" then
+        -- This sound has been explicitly disabled for this entity
+        sound = nil
+      elseif game.is_valid_sound_path(custom_sound) then
+        sound = custom_sound
+      else
+        -- Invalid sound, use custom default
+        custom_sound = nil
+      end
+    end
+    if custom_sound == nil and custom_default ~= nil then
+      if custom_default == "" or custom_default == "none" then
+        -- This sound has been explicitly disabled for this entity
+        sound = nil
+      elseif game.is_valid_sound_path(custom_default) then
+        sound = custom_default
+      end
     end
   end
   
@@ -182,8 +178,7 @@ end)
 
 -- Interface to add custom sounds for specific entities
 local function set_custom_honks(entity_name, honk_single_name, honk_double_name)
-  if settings.global["honk-allow-custom-sounds"].value then
-    global.custom_honks = global.custom_honks or {["honk-single"]={}, ["honk-double"]={}}
+  if settings.global["honk-allow-custom-sounds"].value and global.custom_honks then
     global.custom_honks["honk-single"][entity_name] = honk_single_name
     global.custom_honks["honk-double"][entity_name] = honk_double_name
   end
