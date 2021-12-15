@@ -60,7 +60,7 @@ local function build_honks()
     global.honks.alt = settings.global["honk-sound-manual-alt"].value
   end
   -- game.print("Honks (re)built")
-  
+
   -- List of custom honks
   -- Stored as a dictionary of [default_honk_type][entity_name] -> custom_honk_name
   -- If custom_honk_name is "" or "none", no sound will be played
@@ -102,7 +102,7 @@ function playSoundAtEntity(sound, entity)
       end
     end
   end
-  
+
   -- Play sound
   if sound then
     entity.surface.play_sound{path = sound, position = entity.position}
@@ -117,7 +117,7 @@ function findLocoToHonk(sound, train)
   end
   if train.speed <= 0 and #train.locomotives.back_movers > 0 then
     playSoundAtEntity(sound, train.locomotives.back_movers[#train.locomotives.back_movers])
-  end 
+  end
 end
 
 -- Manual honk
@@ -201,4 +201,3 @@ setmetatable(_ENV,{
       .. serpent.line{key=key or '<nil>'}..'\n')
     end ,
   })
-  
