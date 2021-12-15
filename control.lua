@@ -1,4 +1,62 @@
-local function build_honks()
+local steam_locos = {
+-- YIR Industries Railways
+  "y_loco_fs_steam_green",
+  "yir_loco_sel_blue",
+  "y_loco_steam_wt450",
+  "y_loco_ses_std",
+  "y_loco_ses_red",
+-- YIR Railwas Addons
+  "yir_mre044",
+  "yir_loco_steam_wt580of",
+  "yir_kr_green",
+-- Steam Locomotive
+  "SteamTrains-locomotive",
+}
+
+local boat_locos = {
+  "boat_engine"
+}
+
+local ship_locos = {
+  "cargo_ship_engine"
+}
+
+local function addCustomHonks()
+  -- Add steam trains with MU versions
+  for _,name in pairs(steam_locos) do
+    if game.entity_prototypes[name] then
+      set_custom_honks(name, "honk-single-steam-train", "honk-double-steam-train")
+    end
+    if game.entity_prototypes[name.."-mu"] then
+      set_custom_honks(name.."-mu", "honk-single-steam-train", "honk-double-steam-train")
+    end
+  end
+  
+  -- Add boat and cargo ship
+  for _,name in pairs(boat_locos) do
+    if game.entity_prototypes[name] then
+      set_custom_honks(name, "honk-single-boat", "honk-double-boat")
+    end
+  end
+  for _,name in pairs(ship_locos) do
+    if game.entity_prototypes[name] then
+      set_custom_honks("cargo_ship_engine", "honk-single-ship", "honk-double-ship")
+    end
+  end
+  
+  -- Disable default honks by setting them to "none"
+  local default_single = nil
+  local default_double = nil
+  if settings.global["honk-disable-default-single-honk"].value then
+    default_single = "none"
+  end
+  if settings.global["honk-disable-default-double-honk"].value then
+    default_double = "none"
+  end
+  set_custom_honks("default", default_single, default_double)
+end
+
+local function buildHonks()
   global = global or {}
   -- build a table in the form global.honks[current_state][previous_state] = sound to play
   global.honks = { }
@@ -67,14 +125,17 @@ local function build_honks()
   -- If custom_honk_name is set to nil or an invalid sound, default sound will be played
   -- If an entry exists for entity_name="default", it will override the standard default sounds
   global.custom_honks = {["honk-single"]={}, ["honk-double"]={}}
+  
+  -- Populate list of custom sounds based on installed mods
+  addCustomHonks()
 end
 
-script.on_configuration_changed(build_honks)
-script.on_init(build_honks)
+script.on_configuration_changed(buildHonks)
+script.on_init(buildHonks)
 
 -- Detect setting changes during session
 script.on_event(defines.events.on_runtime_mod_setting_changed, function(event)
-  build_honks()
+  buildHonks()
 end)
 
 function playSoundAtEntity(sound, entity)

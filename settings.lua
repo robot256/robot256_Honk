@@ -71,5 +71,19 @@ data:extend({
     setting_type = "runtime-global",
     default_value = true,
     order = "bg"
-  }
+  },
+  {
+    type = "bool-setting",
+    name = "honk-disable-default-single-honk",
+    order = "aa",
+    setting_type = "runtime-global",
+    default_value = false,
+  },
+  {
+    type = "bool-setting",
+    name = "honk-disable-default-double-honk",
+    order = "ab",
+    setting_type = "runtime-global",
+    default_value = false
+  },
 })
