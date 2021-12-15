@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Version: 4.3.0
+Date: 12. 14. 2021
+  Features:
+    - Incorporated new sounds for steam trains, boats and ships from More Honks. (robot256)
+    - Added remote interface for mods to add custom sounds for certain locomotives. (robot256)
+---------------------------------------------------------------------------------------------------
 Version: 4.2.1
 Date: 03. 19. 2021
   Changes:

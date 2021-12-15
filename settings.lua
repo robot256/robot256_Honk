@@ -37,7 +37,7 @@ data:extend({
     type = "string-setting",
     name = "honk-sound-signal",
     setting_type = "runtime-global",
-    default_value = "honk-single",
+    default_value = "none",
     allowed_values = {"honk-double", "honk-single", "none"},
     order = "bc"
   },
@@ -70,19 +70,19 @@ data:extend({
     name = "honk-allow-custom-sounds",
     setting_type = "runtime-global",
     default_value = true,
-    order = "bg"
+    order = "ca"
   },
   {
     type = "bool-setting",
     name = "honk-disable-default-single-honk",
-    order = "aa",
+    order = "cb",
     setting_type = "runtime-global",
-    default_value = false,
+    default_value = true,
   },
   {
     type = "bool-setting",
     name = "honk-disable-default-double-honk",
-    order = "ab",
+    order = "cd",
     setting_type = "runtime-global",
     default_value = false
   },

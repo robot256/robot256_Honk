@@ -1,3 +1,14 @@
+
+-- Interface to add custom sounds for specific entities
+local function set_custom_honks(entity_name, honk_single_name, honk_double_name)
+  if settings.global["honk-allow-custom-sounds"].value and global.custom_honks then
+    global.custom_honks["honk-single"][entity_name] = honk_single_name
+    global.custom_honks["honk-double"][entity_name] = honk_double_name
+  end
+end
+remote.add_interface('Honk', {set_custom_honks = set_custom_honks})
+
+-- Add custom sounds
 local steam_locos = {
 -- YIR Industries Railways
   "y_loco_fs_steam_green",
@@ -128,15 +139,15 @@ local function buildHonks()
   
   -- Populate list of custom sounds based on installed mods
   addCustomHonks()
+  
+  log("Custom Honk Library updated:\n"..serpent.block(global.custom_honks))
 end
 
 script.on_configuration_changed(buildHonks)
 script.on_init(buildHonks)
 
 -- Detect setting changes during session
-script.on_event(defines.events.on_runtime_mod_setting_changed, function(event)
-  buildHonks()
-end)
+script.on_event(defines.events.on_runtime_mod_setting_changed, buildHonks)
 
 function playSoundAtEntity(sound, entity)
   -- Check if there is a custom sound for this entity, or if a custom default sound has been set
@@ -154,12 +165,14 @@ function playSoundAtEntity(sound, entity)
         custom_sound = nil
       end
     end
-    if custom_sound == nil and custom_default ~= nil then
-      if custom_default == "" or custom_default == "none" then
-        -- This sound has been explicitly disabled for this entity
-        sound = nil
-      elseif game.is_valid_sound_path(custom_default) then
-        sound = custom_default
+    if custom_sound == nil then
+      if custom_default ~= nil then
+        if custom_default == "" or custom_default == "none" then
+          -- This sound has been explicitly disabled for this entity
+          sound = nil
+        elseif game.is_valid_sound_path(custom_default) then
+          sound = custom_default
+        end
       end
     end
   end
@@ -236,17 +249,6 @@ script.on_event(defines.events.on_train_changed_state, function(event)
     findLocoToHonk(global.honks[event.train.state][event.old_state], event.train)
   end
 end)
-
--- Interface to add custom sounds for specific entities
-local function set_custom_honks(entity_name, honk_single_name, honk_double_name)
-  if settings.global["honk-allow-custom-sounds"].value and global.custom_honks then
-    global.custom_honks["honk-single"][entity_name] = honk_single_name
-    global.custom_honks["honk-double"][entity_name] = honk_double_name
-  end
-end
-
-remote.add_interface('Honk', {set_custom_honks = set_custom_honks})
-
 
 ------------------------------------------------------------------------------------
 --                    FIND LOCAL VARIABLES THAT ARE USED GLOBALLY                 --
