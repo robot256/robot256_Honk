@@ -1,36 +1,13 @@
 
 -- Interface to add custom sounds for specific entities
 local function set_custom_honks(entity_name, honk_single_name, honk_double_name)
-  if settings.global["honk-allow-custom-sounds"].value and global.custom_honks then
+  --if settings.global["honk-allow-custom-sounds"].value and global.custom_honks then
     global.custom_honks["honk-single"][entity_name] = honk_single_name
     global.custom_honks["honk-double"][entity_name] = honk_double_name
-  end
+  --end
 end
 remote.add_interface('Honk', {set_custom_honks = set_custom_honks})
 
--- Add custom sounds
-local steam_locos = {
--- YIR Industries Railways
-  "y_loco_fs_steam_green",
-  "yir_loco_sel_blue",
-  "y_loco_steam_wt450",
-  "y_loco_ses_std",
-  "y_loco_ses_red",
--- YIR Railwas Addons
-  "yir_mre044",
-  "yir_loco_steam_wt580of",
-  "yir_kr_green",
--- Steam Locomotive
-  "SteamTrains-locomotive",
-}
-
-local boat_locos = {
-  "boat_engine"
-}
-
-local ship_locos = {
-  "cargo_ship_engine"
-}
 
 local function addCustomHonks()
   -- Add steam trains with MU versions
@@ -58,12 +35,7 @@ local function addCustomHonks()
   -- Disable default honks by setting them to "none"
   local default_single = nil
   local default_double = nil
-  if settings.global["honk-disable-default-single-honk"].value then
-    default_single = "none"
-  end
-  if settings.global["honk-disable-default-double-honk"].value then
-    default_double = "none"
-  end
+  
   set_custom_honks("default", default_single, default_double)
 end
 
