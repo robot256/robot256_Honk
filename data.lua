@@ -27,18 +27,18 @@ data:extend{
     name = "honk-single-diesel",
     filename = soundpath.."honklong.ogg",
     category = "environment",
-    audible_distance_modifier = settings.startup["honk-sound-range"].value,
-    volume = settings.startup["honk-sound-volume"].value
+    audible_distance_modifier = settings.startup["honk-sound-range-diesel"].value,
+    volume = settings.startup["honk-sound-volume-diesel"].value
   },
   {
     type = "sound",
     name = "honk-double-diesel",
     filename = soundpath.."honk2xshort.ogg",
     category = "environment",
-    audible_distance_modifier = settings.startup["honk-sound-range"].value,
-    volume = settings.startup["honk-sound-volume"].value
+    audible_distance_modifier = settings.startup["honk-sound-range-diesel"].value,
+    volume = settings.startup["honk-sound-volume-diesel"].value
   },
-  
+
   -- Steam
   {
     type = "sound",
@@ -56,7 +56,7 @@ data:extend{
     audible_distance_modifier = settings.startup["honk-sound-range-steam"].value,
     volume = settings.startup["honk-sound-volume-steam"].value
   },
-  
+
   -- Boat
   {
     type = "sound",
@@ -74,7 +74,7 @@ data:extend{
     audible_distance_modifier = settings.startup["honk-sound-range-boat"].value,
     volume = settings.startup["honk-sound-volume-boat"].value
   },
-  
+
   -- Ship
   {
     type = "sound",
@@ -92,4 +92,4 @@ data:extend{
     audible_distance_modifier = settings.startup["honk-sound-range-ship"].value,
     volume = settings.startup["honk-sound-volume-ship"].value
   },
-} 
+}

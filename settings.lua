@@ -4,8 +4,9 @@ data:extend{
 	{
     name = "honk-groups",
     type = "string-setting",
-    setting_type = "runtime-global",
-    allowed_values = {},
+    setting_type = "startup",
+    hidden = true,
+    default_value = "none",
     order = "aaa"
   },
   {
@@ -13,11 +14,27 @@ data:extend{
     type = "bool-setting",
     setting_type = "startup",
     default_value = "true",
-    order = "aaa"
+    order = "aba"
+  },
+  {
+    name = "honk-default-sound",
+    type = "string-setting",
+    setting_type = "runtime-global",
+    allowed_values = {"none"},
+    order = "aaa",
+  },
+  {
+    name = "honk-sound-locos-none",
+    type = "string-setting",
+    setting_type = "runtime-global",
+    default_value = "",
+    allow_blank = true,
+    auto_trim = true,
+    order = "acb"
   }
 }
-  
-addHonkSoundGroup("diesel","")
+
+addHonkSoundGroup("diesel")
 
 -- Add custom sounds
 local steam_locos = {
@@ -43,6 +60,6 @@ local ship_locos = {
   "cargo_ship_engine"
 }
 
-addHonkSoundGroup("steam","steam",steam_locos)
-addHonkSoundGroup("boat","boat",boat_locos)
-addHonkSoundGroup("ship","ship",ship_locos)
+addHonkSoundGroup("steam", steam_locos)
+addHonkSoundGroup("boat", boat_locos)
+addHonkSoundGroup("ship", ship_locos)
