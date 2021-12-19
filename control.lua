@@ -207,11 +207,13 @@ end)
 -- Play sound when train changes state
 function onTrainChangedState(event)
   local entity = findLocoToHonk(event.train)
-  local honktype = global.honkmap[entity.name]
-  if honktype then
-    local honkgroup = global.honkgroups[honktype]
-    if honkgroup and honkgroup[event.train.state] and honkgroup[event.train.state][event.old_state] then
-      playSoundAtEntity(honkgroup[event.train.state][event.old_state], entity)
+  if entity then
+    local honktype = global.honkmap[entity.name]
+    if honktype then
+      local honkgroup = global.honkgroups[honktype]
+      if honkgroup and honkgroup[event.train.state] and honkgroup[event.train.state][event.old_state] then
+        playSoundAtEntity(honkgroup[event.train.state][event.old_state], entity)
+      end
     end
   end
 end
