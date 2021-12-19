@@ -3,7 +3,7 @@ local function buildHonkGroup(groupname)
   local group = {}
 
   local start = settings.global["honk-sound-start-"..groupname].value
-  if start ~= "none" then
+  if start ~= "none" and game.is_valid_sound_path(start) then
     group[defines.train_state.on_the_path] = {
       -- play start honk if previous state was one of the below
       [defines.train_state.path_lost] = start,
@@ -19,7 +19,7 @@ local function buildHonkGroup(groupname)
   end
 
   local lost = settings.global["honk-sound-lost-"..groupname].value
-  if lost ~= "none" then
+  if lost ~= "none" and game.is_valid_sound_path(lost) then
     group[defines.train_state.path_lost] = {
       -- play lost honk if previous state was one of the below
       [defines.train_state.on_the_path] = lost,
@@ -37,7 +37,7 @@ local function buildHonkGroup(groupname)
   end
 
   local station = settings.global["honk-sound-station-"..groupname].value
-  if station ~= "none" then
+  if station ~= "none" and game.is_valid_sound_path(station) then
     group[defines.train_state.arrive_station] = {
       -- play station honk only if previous state was normal pathing
       [defines.train_state.on_the_path] = station
@@ -47,7 +47,7 @@ local function buildHonkGroup(groupname)
   end
 
   local signal = settings.global["honk-sound-signal-"..groupname].value
-  if signal ~= "none" then
+  if signal ~= "none" and game.is_valid_sound_path(signal) then
     group[defines.train_state.arrive_signal] = {
       -- play signal honk only if previous state was normal pathing
       [defines.train_state.on_the_path] = signal
@@ -59,13 +59,13 @@ local function buildHonkGroup(groupname)
   local manual = settings.global["honk-sound-manual-"..groupname].value
   if manual == "auto" then
     group.auto = true
-  elseif manual ~= "none" then
+  elseif manual ~= "none" and game.is_valid_sound_path(manual) then
     -- not auto, use this value
     group.manual = manual
   end
 
   local manual_alt = settings.global["honk-sound-manual-alt-"..groupname].value
-  if manual_alt ~= "none" then
+  if manual_alt ~= "none" and game.is_valid_sound_path(manual_alt) then
     group.alt = manual_alt
   end
 
@@ -127,11 +127,15 @@ end
 
 script.on_configuration_changed(buildHonks)
 script.on_init(buildHonks)
-script.on_event(defines.events.on_runtime_mod_setting_changed, buildHonks)
+script.on_event(defines.events.on_runtime_mod_setting_changed, function(event)
+  if string.find(event.setting, "honk") then
+    buildHonks()
+  end
+end)
 
 function playSoundAtEntity(sound, entity)
   -- Play sound
-  if sound then
+  if sound and entity then
     entity.surface.play_sound{path = sound, position = entity.position}
   end
 end
@@ -223,7 +227,7 @@ script.on_event(defines.events.on_train_changed_state, onTrainChangedState)
 --                    FIND LOCAL VARIABLES THAT ARE USED GLOBALLY                 --
 --                              (Thanks to eradicator!)                           --
 ------------------------------------------------------------------------------------
-setmetatable(_ENV,{
+--[[setmetatable(_ENV,{
   __newindex=function (self,key,value) --locked_global_write
     error('\n\n[ER Global Lock] Forbidden global *write*:\n'
       .. serpent.line{key=key or '<nil>',value=value or '<nil>'}..'\n')
@@ -233,3 +237,4 @@ setmetatable(_ENV,{
       .. serpent.line{key=key or '<nil>'}..'\n')
     end ,
   })
+--]]
