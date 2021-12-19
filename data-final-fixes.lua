@@ -4,9 +4,13 @@ if settings.startup["honk-speakers"].value then
   local instrument = {name="honk-horns", notes={}}
   local grouplist = settings.startup["honk-groups"].value
   if grouplist and grouplist ~= "" then
-    for group in string.gmatch(grouplist, "([^,%S]+)") do
-      table.insert(instrument.notes, {name="honk-single-"..group, sound=data.raw.sound["honk-single-"..group]})
-      table.insert(instrument.notes, {name="honk-double-"..group, sound=data.raw.sound["honk-double-"..group]})
+    for group in string.gmatch(grouplist, "([^,]+)") do
+      if data.raw.sound["honk-single-"..group] then
+        table.insert(instrument.notes, {name="honk-single-"..group, sound=data.raw.sound["honk-single-"..group]})
+      end
+      if data.raw.sound["honk-double-"..group] then
+        table.insert(instrument.notes, {name="honk-double-"..group, sound=data.raw.sound["honk-double-"..group]})
+      end
     end
   end
   if #instrument.notes > 0 then
