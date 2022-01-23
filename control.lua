@@ -216,7 +216,16 @@ function onTrainChangedState(event)
     if honktype then
       local honkgroup = global.honkgroups[honktype]
       if honkgroup and honkgroup[event.train.state] and honkgroup[event.train.state][event.old_state] then
-        playSoundAtEntity(honkgroup[event.train.state][event.old_state], entity)
+        if event.train.state == defines.train_state.on_the_path and event.old_state == defines.train_state.manual_control and
+               ( (event.train.back_rail and event.train.back_rail.name == "se-space-elevator-curved-rail") or
+                 (event.train.front_rail and event.train.front_rail.name == "se-space-elevator-curved-rail") ) then
+          -- leaving space elevator, do nothing
+        elseif event.train.state == defines.train_state.arrive_station and 
+           event.train.path_end_stop and event.train.path_end_stop.name == "se-space-elevator-train-stop" then
+          -- approaching space elevator, do nothing
+        else
+          playSoundAtEntity(honkgroup[event.train.state][event.old_state], entity)
+        end
       end
     end
   end
