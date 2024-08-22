@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Version: 5.0.1
+Date: 08. 21. 2024
+  Changes:
+    - Space Exploration compatibility: disabled honking at space elevators.
+    - Added console commands to enable and disable honks for some or all sound types.
+---------------------------------------------------------------------------------------------------
 Version: 5.0.0
 Date: 12. 18. 2021
   Changes:

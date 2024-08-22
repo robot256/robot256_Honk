@@ -1,6 +1,8 @@
 local function buildHonkGroup(groupname)
   -- build a table in the form honkgroup[current_state][previous_state] = sound to play
   local group = {}
+  
+  group.disabled = false
 
   local start = settings.global["honk-sound-start-"..groupname].value
   if start ~= "none" and game.is_valid_sound_path(start) then
@@ -210,12 +212,13 @@ end)
 
 -- Play sound when train changes state
 function onTrainChangedState(event)
+  if global.all_disabled then return end
   local entity = findLocoToHonk(event.train)
   if entity then
     local honktype = global.honkmap[entity.name]
     if honktype then
       local honkgroup = global.honkgroups[honktype]
-      if honkgroup and honkgroup[event.train.state] and honkgroup[event.train.state][event.old_state] then
+      if honkgroup and (not honkgroup.disabled) and honkgroup[event.train.state] and honkgroup[event.train.state][event.old_state] then
         if event.train.state == defines.train_state.on_the_path and event.old_state == defines.train_state.manual_control and
                ( (event.train.back_rail and event.train.back_rail.name == "se-space-elevator-curved-rail") or
                  (event.train.front_rail and event.train.front_rail.name == "se-space-elevator-curved-rail") ) then
@@ -231,6 +234,41 @@ function onTrainChangedState(event)
   end
 end
 script.on_event(defines.events.on_train_changed_state, onTrainChangedState)
+
+-- Console command to disable/enable honks globally or by group
+commands.add_command("honk_disable",
+  "Usage: /honk_disable <group> where <group> is empty for global disable or one of [diesel,steam,boat,ship,all]",
+  function(command)
+    if global.honkgroups[command.parameter] then
+      -- disable this group
+      global.honkgroups[command.parameter].disabled = true
+    else
+      if command.parameter == "all" then
+        for name,group in pairs(global.honkgroups) do
+          group.disabled = true
+        end
+      end
+      global.all_disabled = true
+    end
+  end
+  )
+
+commands.add_command("honk_enable",
+  "Usage: /honk_enable <group> where <group> is empty for global enable or one of [diesel,steam,boat,ship,all]",
+  function(command)
+    if global.honkgroups[command.parameter] then
+      -- disable this group
+      global.honkgroups[command.parameter].disabled = false
+    else
+      if command.parameter == "all" then
+        for name,group in pairs(global.honkgroups) do
+          group.disabled = false
+        end
+      end
+      global.all_disabled = false
+    end
+  end
+  )
 
 ------------------------------------------------------------------------------------
 --                    FIND LOCAL VARIABLES THAT ARE USED GLOBALLY                 --
