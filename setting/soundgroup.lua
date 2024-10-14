@@ -1,12 +1,14 @@
 
-function addHonkSoundGroup(group, locos)
+function addHonkSoundGroup(group, locos, default_range, default_volume)
   -- Add this group to list of available sounds
   data.raw["string-setting"]["honk-groups"].default_value = data.raw["string-setting"]["honk-groups"].default_value..","..group
 
   -- Add this group to list of allowed default sounds
   table.insert(data.raw["string-setting"]["honk-default-sound"].allowed_values, group)
+  local is_default = false
   if not data.raw["string-setting"]["honk-default-sound"].default_value then
     data.raw["string-setting"]["honk-default-sound"].default_value = group
+    is_default = true
   end
 
   data:extend{
@@ -16,7 +18,7 @@ function addHonkSoundGroup(group, locos)
       localised_name = {"mod-setting-name.honk-sound-range",{"string-mod-setting.honk-default-sound-"..group}},
       localised_description = {"mod-setting-description.honk-sound-range"},
       setting_type = "startup",
-      default_value = 10,
+      default_value = default_range or 10,
       minimum_value = 1,
       maximum_value = 100,
       order = "h-"..group.."-ab"
@@ -27,7 +29,7 @@ function addHonkSoundGroup(group, locos)
       localised_name = {"mod-setting-name.honk-sound-volume",{"string-mod-setting.honk-default-sound-"..group}},
       localised_description = {"mod-setting-description.honk-sound-volume"},
       setting_type = "startup",
-      default_value = 1.5,
+      default_value = default_volume or 1.5,
       minimum_value = 0,
       maximum_value = 10,
       order = "h-"..group.."-ac"
@@ -46,7 +48,7 @@ function addHonkSoundGroup(group, locos)
       name = "honk-sound-station-"..group,
       localised_name = {"mod-setting-name.honk-sound-station",{"string-mod-setting.honk-default-sound-"..group}},
       setting_type = "runtime-global",
-      default_value = "honk-single-"..group,
+      default_value = (is_default and "none") or "honk-single-"..group,  -- Default group defaults to no stopping sound
       allowed_values = {"honk-double-"..group, "honk-single-"..group, "none"},
       order = "h-"..group.."-bb"
     },
@@ -58,16 +60,6 @@ function addHonkSoundGroup(group, locos)
       default_value = "none",
       allowed_values = {"honk-double-"..group, "honk-single-"..group, "none"},
       order = "h-"..group.."-bc"
-    },
-    {
-      type = "string-setting",
-      name = "honk-sound-lost-"..group,
-      localised_name = {"mod-setting-name.honk-sound-lost",{"string-mod-setting.honk-default-sound-"..group}},
-      localised_description = {"mod-setting-description.honk-sound-lost"},
-      setting_type = "runtime-global",
-      default_value = "none",
-      allowed_values = {"honk-double-"..group, "honk-single-"..group, "none"},
-      order = "h-"..group.."-bd"
     },
     {
       type = "string-setting",

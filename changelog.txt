@@ -1,4 +1,13 @@
 ---------------------------------------------------------------------------------------------------
+Version: 5.1.0
+Date: 10. 14. 2024
+  Features:
+    - Updated for Factorio 2.0.
+  Changes:
+    - Changed default profile to play no sound when arriving at station.
+    - Removed "Path lost" sound settings (this was removed from the API).
+    - Made default volume configurable per sound group.
+---------------------------------------------------------------------------------------------------
 Version: 5.0.1
 Date: 08. 21. 2024
   Changes:

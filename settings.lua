@@ -13,7 +13,7 @@ data:extend{
     name = "honk-speakers",
     type = "bool-setting",
     setting_type = "startup",
-    default_value = "true",
+    default_value = true,
     order = "aba"
   },
   {
@@ -34,7 +34,8 @@ data:extend{
   }
 }
 
-addHonkSoundGroup("diesel")
+-- First group added becomes the default
+addHonkSoundGroup("diesel", {"locomotive"}, 8, 1.0)
 
 -- Add custom sounds
 local steam_locos = {
@@ -60,6 +61,7 @@ local ship_locos = {
   "cargo_ship_engine"
 }
 
-addHonkSoundGroup("steam", steam_locos)
-addHonkSoundGroup("boat", boat_locos)
-addHonkSoundGroup("ship", ship_locos)
+-- Add groups for modded trains if they exist
+addHonkSoundGroup("steam", steam_locos, 8, 1.0)
+addHonkSoundGroup("boat", boat_locos, 8, 1.0)
+addHonkSoundGroup("ship", ship_locos, 12, 1.5)
