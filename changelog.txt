@@ -1,19 +1,40 @@
 ---------------------------------------------------------------------------------------------------
-Version: 4.2.1
-Date: 03. 19. 2021
+Version: 5.1.0
+Date: 10. 14. 2024
+  Features:
+    - Updated for Factorio 2.0.
   Changes:
-    - Updated to Factorio 1.1
+    - Changed default profile to play no sound when arriving at station.
+    - Removed "Path lost" sound settings (this was removed from the API).
+    - Made default volume configurable per sound group.
 ---------------------------------------------------------------------------------------------------
-Version: 4.1.3
-Date: 05. 25. 2020
-  Bugfixes:
-    - Fixed bug where removing a custom sounds mod would not reset sounds to default settings.
+Version: 5.0.1
+Date: 08. 21. 2024
+  Changes:
+    - Space Exploration compatibility: disabled honking at space elevators.
+    - Added console commands to enable and disable honks for some or all sound types.
+---------------------------------------------------------------------------------------------------
+Version: 5.0.0
+Date: 12. 18. 2021
+  Changes:
+    - First release by robot256.
+    - Incorporated new sounds for steam trains, boats and ships. Currently supports Yuoki Industries, Steam Locomotive, and Cargo Ships.
+    - More settings to control sound triggers based on type of vehicle.  NOTE: Existing settings will be erased when upgrading.
+    - Other mods to add custom locomotive sounds during the data stage.
+    - Train sounds can now be used in the Programmable Speaker.
+    - Please report any bugs, incompatibilities, or ideas for more sounds!
+  Credits:
+    - honk-single-steam-train.ogg remixed from original by Bidone https://freesound.org/people/Bidone/sounds/71778/ (CC0 Public Domain)
+    - honk-double-steam-train.ogg remixed from original by boteman https://freesound.org/people/boteman/sounds/57196/ (CC-BY-NC 3.0 https://creativecommons.org/licenses/by-nc/3.0/)
+    - honk-single-boat.ogg remixed from original by arnaud coutancier https://freesound.org/people/arnaud%20coutancier/sounds/417695/ (CC-BY-NC 3.0 https://creativecommons.org/licenses/by-nc/3.0/)
+    - honk-double-boat.ogg remixed from original by tim.kahn https://freesound.org/people/tim.kahn/sounds/265977/ (CC-BY-NC 3.0 https://creativecommons.org/licenses/by-nc/3.0/)
+    - honk-single-ship.ogg remixed from original by milo https://freesound.org/people/milo/sounds/23722/ (CC-BY 3.0 https://creativecommons.org/licenses/by/3.0/)
+    - honk-double-ship.ogg remixed from original by inchadney https://freesound.org/people/inchadney/sounds/135825/ (CC-BY 3.0 https://creativecommons.org/licenses/by/3.0/)
 ---------------------------------------------------------------------------------------------------
 Version: 4.1.1
-Date: 05. 25. 2020
+Date: 26. 11. 2020
   Changes:
-    - Added mod interface to register custom sounds for specific entities, or override/disable the default sounds. (robot256)
-    - Added setting to enable custom sounds or disable them (also clears the list of custom sounds if it needs resetting).
+    - Updated to Factorio 1.1
 ---------------------------------------------------------------------------------------------------
 Version: 4.1.0
 Date: 03. 02. 2020

@@ -1,75 +1,67 @@
-data:extend({
+require("setting.soundgroup")
+
+data:extend{
 	{
-		type = "double-setting",
-		name = "honk-sound-volume",
-		setting_type = "startup",
-		default_value = 1.5,
-    minimum_value = 0,
-    maximum_value = 10,
-    order = "ac"
-	},
-	{
-		type = "double-setting",
-		name = "honk-sound-range",
-		setting_type = "startup",
-		default_value = 10,
-    minimum_value = 1,
-    maximum_value = 100,
-    order = "ab"
-	},
-  {
+    name = "honk-groups",
     type = "string-setting",
-    name = "honk-sound-start",
-    setting_type = "runtime-global",
-    default_value = "honk-double",
-    allowed_values = {"honk-double", "honk-single", "none"},
-    order = "ba"
-  },
-  {
-    type = "string-setting",
-    name = "honk-sound-station",
-    setting_type = "runtime-global",
-    default_value = "honk-single",
-    allowed_values = {"honk-double", "honk-single", "none"},
-    order = "bb"
-  },
-  {
-    type = "string-setting",
-    name = "honk-sound-signal",
-    setting_type = "runtime-global",
-    default_value = "honk-single",
-    allowed_values = {"honk-double", "honk-single", "none"},
-    order = "bc"
-  },
-  {
-    type = "string-setting",
-    name = "honk-sound-lost",
-    setting_type = "runtime-global",
+    setting_type = "startup",
+    hidden = true,
     default_value = "none",
-    allowed_values = {"honk-double", "honk-single", "none"},
-    order = "bd"
+    order = "aaa"
   },
   {
-    type = "string-setting",
-    name = "honk-sound-manual",
-    setting_type = "runtime-global",
-    default_value = "auto",
-    allowed_values = {"auto","honk-double", "honk-single", "none"},
-    order = "be"
-  },
-  {
-    type = "string-setting",
-    name = "honk-sound-manual-alt",
-    setting_type = "runtime-global",
-    default_value = "honk-single",
-    allowed_values = {"honk-double", "honk-single", "none"},
-    order = "bf"
-  },
-  {
+    name = "honk-speakers",
     type = "bool-setting",
-    name = "honk-allow-custom-sounds",
-    setting_type = "runtime-global",
+    setting_type = "startup",
     default_value = true,
-    order = "bg"
+    order = "aba"
+  },
+  {
+    name = "honk-default-sound",
+    type = "string-setting",
+    setting_type = "runtime-global",
+    allowed_values = {"none"},
+    order = "aaa",
+  },
+  {
+    name = "honk-sound-locos-none",
+    type = "string-setting",
+    setting_type = "runtime-global",
+    default_value = "",
+    allow_blank = true,
+    auto_trim = true,
+    order = "acb"
   }
-})
+}
+
+-- First group added becomes the default
+addHonkSoundGroup("diesel", {"locomotive"}, 8, 1.0)
+
+-- Add custom sounds
+local steam_locos = {
+-- YIR Industries Railways
+  "y_loco_fs_steam_green",
+  "yir_loco_sel_blue",
+  "y_loco_steam_wt450",
+  "y_loco_ses_std",
+  "y_loco_ses_red",
+-- YIR Railways Addons
+  "yir_mre044",
+  "yir_loco_steam_wt580of",
+  "yir_kr_green",
+-- Steam Locomotive
+  "SteamTrains-locomotive",
+}
+
+local boat_locos = {
+  "boat_engine"
+}
+
+local ship_locos = {
+  "cargo_ship_engine"
+}
+
+-- Add groups for modded trains if they exist
+addHonkSoundGroup("steam", steam_locos, 8, 1.0)
+addHonkSoundGroup("boat", boat_locos, 8, 1.0)
+addHonkSoundGroup("ship", ship_locos, 12, 1.5)
