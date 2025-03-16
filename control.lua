@@ -217,7 +217,7 @@ function onTrainChangedState(event)
 end
 script.on_event(defines.events.on_train_changed_state, onTrainChangedState)
 
--- Console command to disable/enable honks globally or by group
+-- Console command to disable/enable honks globally or by group, for integration with RCON & streaming
 commands.add_command("honk_disable",
   "Usage: /honk_disable <group> where <group> is empty for global disable or one of [diesel,steam,boat,ship,all]",
   function(command)
@@ -252,6 +252,25 @@ commands.add_command("honk_enable",
   end
   )
 
+
+
+-- Debug command
+function cmd_debug(params)
+  local cmd = params.parameter
+  if cmd == "dump" then
+    for v, data in pairs(storage) do
+      print_game(v, ": ", data)
+    end
+  elseif cmd == "dumplog" then
+    for v, data in pairs(storage) do
+      print_file(v, ": ", data)
+    end
+    print_game("Dump written to log file")
+  end
+end
+commands.add_command("honk-debug", "", cmd_debug)
+
+
 ------------------------------------------------------------------------------------
 --                    FIND LOCAL VARIABLES THAT ARE USED GLOBALLY                 --
 --                              (Thanks to eradicator!)                           --
@@ -267,3 +286,4 @@ commands.add_command("honk_enable",
     end ,
   })
 --]]
+if script.active_mods["gvv"] then require("__gvv__.gvv")() end
