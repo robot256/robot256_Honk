@@ -15,7 +15,7 @@ data:extend{
   {
     type = "custom-input",
     name = "toggle-train-control",
-    key_sequence = "J"
+    key_sequence = ""
   },
 }
 

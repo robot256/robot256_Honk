@@ -1,5 +1,10 @@
 ---------------------------------------------------------------------------------------------------
 Version: 5.2.0
+Date: 06. 30. 2026
+  Changes:
+    - Removed default keybinding for "Switch train to automatic mode". It was conflicting with the default for "connect wagons".
+---------------------------------------------------------------------------------------------------
+Version: 5.2.0
 Date: 06. 24. 2026
   Features:
     - Updated for Factorio 2.1.
